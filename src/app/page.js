@@ -20,8 +20,8 @@ const Timer = ({ time }) => {
 };
 
 const questions = [
-  { question: "What is the capital of France?", answer: "Paris" },
-  { question: "What is 5 + 3?", answer: "8" },
+  { question: "What is the briliant capital of France?", answer: "Paris" },
+  { question: "What is 5 + + 3?", answer: "8" },
   { question: "Which planet is known as the Red Planet?", answer: "Mars" },
 ];
 
