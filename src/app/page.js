@@ -12,7 +12,7 @@ const Timer = ({ time }) => {
   return (
     <div
       className={`w-28 h-28 rounded-full border-8 flex items-center justify-center text-4xl font-bold 
-      ${time <= 10 ? 'border-red-500 animate-[pulse_1s_ease-in-out_infinite] text-red-500' : 'border-gray-200 text-orange-500'}`}
+      ${time <= 10 ? "border-red-500 animate-[pulse_1s_ease-in-out_infinite] text-red-500" : "border-gray-200 text-orange-500"}`}
     >
       {time}
     </div>
@@ -20,9 +20,38 @@ const Timer = ({ time }) => {
 };
 
 const questions = [
-  { question: "What is the brilliant capital of France?", answer: "Paris" },
-  { question: "What is 5 + 3?", answer: "8" },
-  { question: "Which planet is known as the Red Planet?", answer: "Mars" },
+  { question: "Which country won the FIFA World Cup in 2018?", answer: "France", image: null },
+  { question: "Who holds the record for the most goals in a single World Cup tournament?", answer: "Just Fontaine", image: null },
+  { question: "Who won the first ever Rugby World Cup in 1987?", answer: "New Zealand", image: null },
+  { question: "Who won the Women's Football World Cup in 2019?", answer: "USA", image: null },
+  { question: "Which country has won the most Olympic gold medals in history?", answer: "USA", image: null },
+  
+  { question: "Which of the following is a programming language developed by Sun Microsystems?", answer: "Java", image: null },
+  { question: "What does the acronym 'RAM' stand for?", answer: "Random Access Memory", image: null },
+  { question: "Who is the founder of Android Inc.?", answer: "Andy Rubin", image: null },
+  { question: "Which app is the default for web browsing on a Mac?", answer: "Safari", image: null },
+  { question: "Who is known as the co-founder of Apple and one of the creators of the Macintosh?", answer: "Steve Jobs", image: null },
+  
+  { question: "What is the primary greenhouse gas responsible for global warming?", answer: "Carbon Dioxide", image: null },
+  { question: "Which gas is primarily responsible for the depletion of the ozone layer?", answer: "Chlorofluorocarbons (CFCs)", image: null },
+  { question: "Which of the following is NOT an effect of climate change?", answer: "Global cooling", image: null },
+  { question: "Which of the following is a non-renewable resource?", answer: "Oil", image: null },
+  { question: "Which organization monitors the health of the planet and climate change at a global level?", answer: "Intergovernmental Panel on Climate Change (IPCC)", image: null },
+
+  { question: "Guess the person name?", answer: "Albert Einstein", image: "/Einstain.png" },
+  { question: "Guess the person name?", answer: "Kalpana Chawla", image: "/qus17.jpg" },
+  { question: "Guess the person name?", answer: "Aryabhatta", image: "/qus18.jpg"  },
+  { question: "Guess the person name?", answer: "Isaac Newton", image: "/qus19.jpg"  },
+  { question: "Guess the person name?", answer: "Galileo", image: "/qus20.jpg"  },
+
+  { question: "Identify this logo?", answer: "BP P.I.C (British Petroleum)", image: "/qus21.jpg"  },
+  { question: "Identify this logo?", answer: "VideoCon", image: "/qus22.jpg"  },
+  { question: "Identify this logo?", answer: "Reebok", image: "/qus23.jpg"  },
+  { question: "Identify this logo?", answer: "Volkswagen", image: "/qus24.jpg"  },
+  { question: "Identify this logo?", answer: "Shell", image: "/qus25.jpg"  },
+
+
+
 ];
 
 export default function QuizApp() {
@@ -35,7 +64,7 @@ export default function QuizApp() {
   useEffect(() => {
     if (!quizStarted || quizFinished) return;
 
-    setTimer(30); // Reset timer when a new question loads
+    setTimer(30);
 
     let interval = setInterval(() => {
       setTimer((prev) => {
@@ -48,7 +77,7 @@ export default function QuizApp() {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [quizStarted, currentQuestion]); // Re-run when quiz starts or question changes
+  }, [quizStarted, currentQuestion]);
 
   const handleNext = () => {
     if (currentQuestion < questions.length - 1) {
@@ -119,21 +148,42 @@ export default function QuizApp() {
       </h2>
       <Timer time={timer} />
       <div className="w-full max-w-3xl mx-auto bg-white/10 backdrop-blur-lg rounded-2xl p-8 mt-4">
-        <h2 className="text-4xl font-bold">{questions[currentQuestion].question}</h2>
-        <div className="flex justify-end mt-6">
-          <button
-            onClick={() => setShowAnswer(!showAnswer)}
-            className="bg-gradient-to-r from-yellow-400 to-yellow-600 text-white px-6 py-2 rounded-xl text-lg font-bold hover:from-yellow-500 hover:to-yellow-700 transform hover:scale-105 transition-all shadow-lg"
-          >
-            See Answer
-          </button>
+        {/* Question Section */}
+        <div className="space-y-8">
+          {/* Question on first line */}
+          <h2 className="text-4xl font-bold text-left">
+            {questions[currentQuestion].question}
+          </h2>
+          
+          {/* Image if exists */}
+          {questions[currentQuestion].image && (
+            <div className="flex justify-center">
+              <img
+                src={questions[currentQuestion].image}
+                alt="Question"
+                className="w-50 h-[180px] object-contain border-2 border-dashed border-gray-300 rounded-lg"
+              />
+            </div>
+          )}
+          
+          {/* Answer button and answer on the same line */}
+          <div className="flex justify-end mt-[10px] items-center space-x-10">
+            {showAnswer && (
+              <h3 className="text-3xl font-bold text-green-300">
+                {questions[currentQuestion].answer}
+              </h3>
+            )}
+            <button
+              onClick={() => setShowAnswer(!showAnswer)}
+              className="bg-gradient-to-r from-yellow-400 to-yellow-600 text-white px-6 py-2 rounded-xl text-lg font-bold hover:from-yellow-500 hover:to-yellow-700 transform hover:scale-105 transition-all shadow-lg"
+            >
+              {showAnswer ? "Hide Answer" : "See Answer"}
+            </button>
+          </div>
         </div>
-        {showAnswer && (
-          <h3 className="text-3xl font-bold text-green-300 mt-6 animate-fadeIn">
-            {questions[currentQuestion].answer}
-          </h3>
-        )}
       </div>
+
+      {/* Navigation Buttons */}
       <div className="mt-6 flex gap-4">
         {currentQuestion > 0 && (
           <button
