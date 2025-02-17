@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState, useEffect } from "react";
 
 const Timer = ({ time }) => {
@@ -20,39 +20,40 @@ const Timer = ({ time }) => {
 };
 
 const questions = [
-  { question: "What is the briliant capital of France?", answer: "Paris" },
-  { question: "What is 5 + + 3?", answer: "8" },
+  { question: "What is the brilliant capital of France?", answer: "Paris" },
+  { question: "What is 5 + 3?", answer: "8" },
   { question: "Which planet is known as the Red Planet?", answer: "Mars" },
 ];
 
 export default function QuizApp() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [showAnswer, setShowAnswer] = useState(false);
-  const [timer, setTimer] = useState(60);
+  const [timer, setTimer] = useState(30);
   const [quizStarted, setQuizStarted] = useState(false);
   const [quizFinished, setQuizFinished] = useState(false);
 
   useEffect(() => {
-    let interval;
-    if (quizStarted) {
-      interval = setInterval(() => {
-        setTimer((prev) => {
-          if (prev <= 1) {
-            clearInterval(interval);
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-    }
+    if (!quizStarted || quizFinished) return;
+
+    setTimer(30); // Reset timer when a new question loads
+
+    let interval = setInterval(() => {
+      setTimer((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
     return () => clearInterval(interval);
-  }, [quizStarted]);
+  }, [quizStarted, currentQuestion]); // Re-run when quiz starts or question changes
 
   const handleNext = () => {
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
       setShowAnswer(false);
-      setTimer(60);
     } else {
       setQuizFinished(true);
     }
@@ -62,7 +63,6 @@ export default function QuizApp() {
     if (currentQuestion > 0) {
       setCurrentQuestion(currentQuestion - 1);
       setShowAnswer(false);
-      setTimer(60);
     }
   };
 
@@ -95,7 +95,12 @@ export default function QuizApp() {
         </h1>
         <h2 className="text-4xl font-bold text-green-300 animate-bounce">We Appreciate Your Effort!</h2>
         <button
-          onClick={() => { setQuizStarted(false); setQuizFinished(false); setCurrentQuestion(0); setTimer(60); }}
+          onClick={() => {
+            setQuizStarted(false);
+            setQuizFinished(false);
+            setCurrentQuestion(0);
+            setTimer(30);
+          }}
           className="bg-gradient-to-r from-red-400 to-red-600 text-white px-8 py-4 rounded-2xl text-xl font-bold hover:from-red-500 hover:to-red-700 transform hover:scale-105 transition-all shadow-lg"
         >
           Restart Quiz
@@ -105,7 +110,7 @@ export default function QuizApp() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 p-4 text-white text-center space-y-4">
+    <div className="min-h-screen flex flex-col max-w-full items-center justify-center bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 p-4 text-white text-center space-y-4">
       <h1 className="text-3xl font-black bg-clip-text text-transparent bg-gradient-to-r from-yellow-200 to-yellow-500">
         Gandhi Institute For Education And Technology
       </h1>
@@ -142,7 +147,7 @@ export default function QuizApp() {
           onClick={handleNext}
           className="bg-gradient-to-r from-blue-400 to-blue-600 text-white px-8 py-3 rounded-xl text-lg font-bold hover:from-blue-500 hover:to-blue-700 transform hover:scale-105 transition-all shadow-lg"
         >
-          {currentQuestion < questions.length - 1 ? 'Next' : 'Finish Quiz'}
+          {currentQuestion < questions.length - 1 ? "Next" : "Finish Quiz"}
         </button>
       </div>
     </div>
